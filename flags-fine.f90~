@@ -1,0 +1,64 @@
+   print *, "start to define flags"
+
+  flagx = 0; flagy = 0
+  xsum1 = 0 ; xsum2 = 0; xsum0 = 0
+  ysum1 = 0 ; ysum2 = 0; ysum0 = 0
+  
+        DO J=jobj1+1, jobj2-1
+           DO I=iobj1+1, iobj2-1
+
+       ia=i-iobj1+1
+       ja=j-jobj1+1
+     
+! for x components
+              
+         if(m_code(ia,ja).eq.m_code(ia,ja-1)) then
+                temp = 1
+                else 
+                temp = 0
+          end if
+     
+        
+         if((temp.eq.1)) then
+               if((m_code(ia,ja).eq.0)) then
+                  xsum0 = xsum0 + 1 
+               else 
+                  flagx(i,j) = 1
+                  xsum1 = xsum1 + 1 
+               end if
+         else 
+               flagx(i,j) = 2
+               xsum2 = xsum2 + 1
+         end if
+
+          
+! for y components      
+                   
+
+          if(m_code(ia,ja).eq.m_code(ia-1,ja)) then
+                  temp = 1
+               else 
+                  temp = 0
+          end if
+    
+
+          if((temp.eq.1)) then
+            if((m_code(ia,ja).eq.0)) then
+               ysum0 = ysum0 + 1 
+            else 
+               flagy(i,j) = 1
+               ysum1 = ysum1 + 1 
+            end if
+         else 
+            flagy(i,j) = 2
+            ysum2 = ysum2 + 1
+         end if    
+               
+
+           END DO
+        END DO
+
+     print *, "xsum1=",xsum1,"xsum2=",xsum2,"xsum0=",xsum0 
+     print *, "ysum1=",ysum1,"ysum2=",ysum2,"ysum0=",ysum0 
+
+     print *, "finish flags"

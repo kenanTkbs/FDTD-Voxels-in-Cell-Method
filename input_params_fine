@@ -1,0 +1,6 @@
+nx_ny: 1200 1200 
+t_max: 600
+cell_size_in_m: 1.0D-3
+huygens_surfaces: 580 660 580 660
+location_of_objects: 588 644 588 644
+size_object: 56 56 

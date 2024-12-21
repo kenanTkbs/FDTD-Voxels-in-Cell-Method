@@ -1,0 +1,110 @@
+   print *, "start to define vflags"
+
+  flagx = 0; flagy = 0
+  xsum1 = 0 ; xsum11 = 0 ; xsum12 = 0 ; xsum21 = 0 ; xsum22 = 0; xsum0 = 0
+  ysum1 = 0 ; ysum11 = 0 ; ysum12 = 0 ; ysum21 = 0 ; ysum22 = 0; ysum0 = 0
+  
+        DO J=jobj1+2, jobj2-2
+           DO I=iobj1+2, iobj2-2
+
+       ia=i-iobj1+1
+       ja=j-jobj1+1
+     
+! for x components
+
+          ii=ia*rate                 
+          jj=ja*rate-h_rate 
+
+         if(m_code(ii,jj).eq.m_code(ii,jj-1)) then
+                temps = 1
+                else 
+                temps = 0
+          end if
+
+         if(m_code(ii-1,jj).eq.m_code(ii-1,jj-1)) then
+            tempf = 1
+            else 
+            tempf = 0
+         end if
+      
+        
+         if((temps.eq.1).and.(tempf.eq.1)) then
+            if(m_code(ii,jj).eq.m_code(ii-1,jj-1)) then
+               if(m_code(ii,jj).eq.0) then
+                  xsum0 = xsum0 + 1 
+               else 
+                  flagx(i,j) = 1
+                  xsum1 = xsum1 + 1 
+               end if
+            else 
+               flagx(i,j) = 11
+               xsum11 = xsum11 + 1
+            end if
+         else if ((tempf.eq.1).and.(temps.eq.0)) then
+            flagx(i,j) = 12
+            xsum12 = xsum12 + 1
+         else if ((tempf.eq.0).and.(temps.eq.1)) then
+            flagx(i,j) = 21
+            xsum21 = xsum21 + 1
+         else 
+            flagx(i,j) = 22
+            xsum22 = xsum22 + 1 
+         end if  
+
+          
+! for y components      
+      
+              jj=ja*rate                 
+              ii=ia*rate-h_rate
+
+          if(m_code(ii,jj).eq.m_code(ii-1,jj)) then
+                  temps = 1
+               else 
+                  temps = 0
+          end if
+
+         
+          if(m_code(ii,jj-1).eq.m_code(ii-1,jj-1)) then
+                  tempf = 1
+               else 
+                  tempf = 0
+          end if         
+
+          if((temps.eq.1).and.(tempf.eq.1)) then
+            if(m_code(ii,jj).eq.m_code(ii-1,jj-1)) then
+               if((m_code(ii,jj).eq.0)) then
+                  ysum0 = ysum0 + 1 
+               else 
+                  flagy(i,j) = 1
+                  ysum1 = ysum1 + 1 
+               end if
+            else 
+               flagy(i,j) = 11
+               ysum11 = ysum11 + 1
+            end if
+          else if ((tempf.eq.1).and.(temps.eq.0)) then
+             flagy(i,j) = 12
+             ysum12 = ysum12 + 1
+          else if ((tempf.eq.0).and.(temps.eq.1)) then
+             flagy(i,j) = 21
+             ysum21 = ysum21 + 1
+            else 
+               flagy(i,j) = 22
+               ysum22 = ysum22 + 1 
+             end if    
+            
+        END DO
+     END DO
+
+     temp = xsum1 + xsum11 + xsum12 + xsum21 + xsum22
+     print *, "xsum1=",xsum1,"xsum11=",xsum11,"xsum12=",xsum12,"xsum21=",xsum21,"xsum22=",xsum22,"xsum0=",xsum0
+     print *, "xsum1=",xsum1/temp*100,"xsum11=",xsum11/temp*100,"xsum12=",xsum12/temp*100, &
+          &"xsum21=",xsum21/temp*100,"xsum22=",xsum22/temp*100
+
+     temp = ysum1 + ysum11 + ysum12 + ysum21 + ysum22    
+     print *, "ysum1=",ysum1,"ysum11=",ysum11,"ysum12=",ysum12,"ysum21=",ysum21,"ysum22=",ysum22,"ysum0=",ysum0
+     print *, "ysum1=",ysum1/temp*100,"ysum11=",ysum11/temp*100,"ysum12=",ysum12/temp*100, &
+          &"ysum21=",ysum21/temp*100,"ysum22=",ysum22/temp*100
+
+
+     

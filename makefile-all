@@ -1,0 +1,25 @@
+#!/bin/bash
+
+rm -r outfiles*
+
+gfortran -o fout -O3 fine-2D-TE-FDTD.f90
+gfortran -o vout -O3 VIC-2D-TE-FDTD.f90
+
+    for (( movey=0; movey<=1; movey++ ))
+    do
+	for (( movex=0; movex<=1; movex++ ))
+	do
+
+	    echo "movex: $movex " > move_object
+	    echo "movey: $movey " >> move_object
+	    mkdir outfiles-fine-$movex-$movey
+	    mkdir outfiles-VIC-$movex-$movey
+	    
+	    ./fout
+	    ./vout
+
+	done
+    done
+
+#angle=$(( $angle + 15 ))
+#done
